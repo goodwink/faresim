@@ -1,0 +1,11 @@
+.rowNumber {
+  color: #999999;
+  text-align: right;
+}
+
+.planeRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
