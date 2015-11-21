@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Input, Button } from 'react-bootstrap';
+import { Panel, Input, Button } from 'react-bootstrap';
 
 import Quote from '../components/Quote.jsx';
 
@@ -35,20 +35,22 @@ export default class Controls extends Component {
 
   render() {
     return (
-      <form>
-        <Input type="select" label="Flight" onChange={e => this.handleFlightChange(e)} ref="flight">
-          {this.props.flights.map((flight) => (
-            <option value={flight.id} key={flight.id}>{flight.id}: {flight.origin} > {flight.destination}</option>
-          ))}
-        </Input>
-        <Input type="select" label="Cabin" ref="cabin">
-          {this.state.cabins && this.state.cabins.map((cabin) => (
-            <option value={cabin.id} key={cabin.id}>{cabin.cabinName}</option>
-          ))}
-        </Input>
-        <Button onClick={e => this.quoteFareClick(e)}>Quote Fare</Button>
-        <Quote quote={this.props.quote} buyFare={this.props.buyFare}/>
-      </form>
+      <Panel header="Manual Booking">
+        <form>
+          <Input type="select" label="Flight" onChange={e => this.handleFlightChange(e)} ref="flight">
+            {this.props.flights.map((flight) => (
+              <option value={flight.id} key={flight.id}>{flight.id}: {flight.origin} > {flight.destination}</option>
+            ))}
+          </Input>
+          <Input type="select" label="Cabin" ref="cabin">
+            {this.state.cabins && this.state.cabins.map((cabin) => (
+              <option value={cabin.id} key={cabin.id}>{cabin.cabinName}</option>
+            ))}
+          </Input>
+          <Button onClick={e => this.quoteFareClick(e)}>Quote Fare</Button>
+          <Quote quote={this.props.quote} buyFare={this.props.buyFare}/>
+        </form>
+      </Panel>
     );
   }
 }

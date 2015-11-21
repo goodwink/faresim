@@ -49,42 +49,46 @@ export default class ReservationManager {
     });
   }
 
-  buyFare(flightNumber, cabinClass, fareCode) {
+  buyFare(flightNumber, cabinClass, fareCode, seats) {
     let flight = this.inventory.find((flight) => flight.id === flightNumber);
     let fares = flight.fares[cabinClass];
     let fare = fares.find((fare) => fare.code === fareCode);
     let cabin = flight.equipment.cabins.find(c => c.id === cabinClass);
+    let pnr = [];
 
-    if (!fare || fare.available === 0) return false;
+    if (!fare || fare.available < seats) return false;
 
-    let row = flight.equipment.seatmap.rows.find(function (row) {
-      if (row.id < cabin.rowStart || row.id > cabin.rowEnd)
-        return false;
-      else
-        return row.seats.find((seat) => !seat.occupied);
-    });
+    for (let i = 0; i < seats; i++) {
+      let row = flight.equipment.seatmap.rows.find(function (row) {
+        if (row.id < cabin.rowStart || row.id > cabin.rowEnd)
+          return false;
+        else
+          return row.seats.find((seat) => !seat.occupied);
+      });
 
-    if (!row) return false;
+      if (!row) return false;
 
-    let seat = row.seats.find((seat) => !seat.occupied);
+      let seat = row.seats.find((seat) => !seat.occupied);
 
-    if (!seat) return false;
+      if (!seat) return false;
 
-    let booking = {
-      flight: flightNumber,
-      cabinName: cabin.cabinName,
-      fareClass: fare.code,
-      revenue: fare.price * flight.baseFare,
-      row: row.id,
-      seat: seat.id
-    };
+      let booking = {
+        flight: flightNumber,
+        cabinName: cabin.cabinName,
+        fareClass: fare.code,
+        revenue: fare.price * flight.baseFare,
+        row: row.id,
+        seat: seat.id
+      };
 
-    this.bookings.push(booking);
+      this.bookings.push(booking);
+      pnr.push(booking);
 
-    seat.occupied = true;
+      seat.occupied = true;
 
-    fare.available = fare.available - 1;
+      fare.available = fare.available - 1;
+    }
 
-    return booking;
+    return pnr;
   }
 }

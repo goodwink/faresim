@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 
 import App from './containers/App.jsx';
 import fareSim from './reducers';
+import CustomerBehaviorManager from './engine/customer.js';
 
 require('bootstrap-css-only/css/bootstrap.css');
 
@@ -15,6 +16,8 @@ const createStoreWithMiddleware = applyMiddleware(
 )(createStore);
 
 let store = createStoreWithMiddleware(fareSim);
+
+const customerBehaviorManager = new CustomerBehaviorManager(store);
 
 ReactDOM.render(
   <Provider store={store}>
